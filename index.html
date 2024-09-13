@@ -1,34 +1,235 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AJAXでコンテンツを取得</title>
-<script>
-function loadContent() {
-const xhr = new XMLHttpRequest();
-xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts', true); // 例としてJSONPlaceholderのダミーデータを使用
-xhr.onload = function() {
-if (xhr.status === 200) {
-const data = JSON.parse(xhr.responseText);
-let output = '<h2>記事一覧</h2>';
-data.forEach(post => {
-output += `<h3>${post.title}</h3><p>${post.body}</p>`;
-});
-document.getElementById('content').innerHTML = output;
-} else {
-document.getElementById('content').innerHTML = 'データの取得に失敗しました。';
-}
-};
-xhr.onerror = function() {
-document.getElementById('content').innerHTML = 'リクエストエラーが発生しました。';
-};
-xhr.send();
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>おしゃれなWebサイト作成ツール</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar button, .toolbar select {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .toolbar button:hover, .toolbar select:hover {
+            background-color: #45a049;
+        }
+
+        #editor {
+            border: 1px solid #ccc;
+            padding: 20px;
+            min-height: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #output {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+
+        /* スマホ対応 */
+        @media (max-width: 768px) {
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .toolbar button, .toolbar select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
 </head>
-<body onload="loadContent()">
-<h1>外部コンテンツの取得</h1>
-<div id="content">ここに外部コンテンツが表示されます。</div>
+<body>
+
+    <h1>おしゃれなWebサイト作成ツール</h1>
+
+    <!-- ツールバー -->
+    <div class="toolbar">
+        <select id="titleLevel">
+            <option value="h1">タイトル 1 (h1)</option>
+            <option value="h2">タイトル 2 (h2)</option>
+            <option value="h3">タイトル 3 (h3)</option>
+        </select>
+        <button onclick="addTitle()">タイトルを追加</button>
+        <button onclick="addParagraph()">段落を追加</button>
+        <button onclick="toggleBold()">太字</button>
+        <button onclick="toggleItalic()">斜体</button>
+        <button onclick="addImage()">画像を追加</button>
+        <button onclick="addGif()">GIFを追加</button>
+        <button onclick="addChart()">グラフを作成</button>
+        <button onclick="addPoll()">投票を作成</button>
+        <button onclick="addEmbed()">埋め込みを追加</button>
+        <button onclick="generateHTML()">HTMLコード生成</button>
+    </div>
+
+    <!-- 編集領域 -->
+    <div contenteditable="true" id="editor" placeholder="ここにコンテンツを入力...">
+        <h1>タイトルをここに追加</h1>
+        <p>段落テキストをここに追加</p>
+    </div>
+
+    <!-- 出力領域 -->
+    <h3>生成されたHTMLコード</h3>
+    <textarea id="output" rows="10" readonly></textarea>
+
+    <script>
+        // タイトルを追加
+        function addTitle() {
+            var editor = document.getElementById('editor');
+            var titleLevel = document.getElementById('titleLevel').value;
+            var titleText = prompt("タイトルの内容を入力:");
+            if (titleText) {
+                editor.innerHTML += `<${titleLevel}>${titleText}</${titleLevel}>`;
+            }
+        }
+
+        // 段落を追加
+        function addParagraph() {
+            var editor = document.getElementById('editor');
+            var paragraph = prompt("段落の内容を入力:");
+            if (paragraph) {
+                editor.innerHTML += "<p>" + paragraph + "</p>";
+            }
+        }
+
+        // 太字をトグル
+        function toggleBold() {
+            document.execCommand('bold');
+        }
+
+        // 斜体をトグル
+        function toggleItalic() {
+            document.execCommand('italic');
+        }
+
+        // 画像を追加 (ファイルアップロード対応)
+        function addImage() {
+            var imageUrl = prompt("画像のURLまたはファイルを選択:");
+            if (imageUrl) {
+                var imgTag = `<img src="${imageUrl}" alt="画像" style="max-width:100%;">`;
+                document.getElementById('editor').innerHTML += imgTag;
+            }
+        }
+
+        // GIFを追加
+        function addGif() {
+            var gifUrl = prompt("GIFのURLを入力:");
+            if (gifUrl) {
+                document.getElementById('editor').innerHTML += `<img src="${gifUrl}" alt="GIF" style="max-width:100%;">`;
+            }
+        }
+
+        // グラフを追加
+        function addChart() {
+            var chartCode = `
+                <canvas id="myChart" width="400" height="200"></canvas>
+                <script>
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                            datasets: [{
+                                label: '# of Votes',
+                                data: [12, 19, 3, 5, 2, 3],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                </script>
+            `;
+            document.getElementById('editor').innerHTML += chartCode;
+        }
+
+        // 投票を追加
+        function addPoll() {
+            var pollHTML = `
+                <form>
+                    <label>好きな色を選んでください:</label><br>
+                    <input type="radio" name="color" value="Red">Red<br>
+                    <input type="radio" name="color" value="Blue">Blue<br>
+                    <input type="radio" name="color" value="Green">Green<br>
+                    <input type="radio" name="color" value="Yellow">Yellow<br>
+                </form>
+            `;
+            document.getElementById('editor').innerHTML += pollHTML;
+        }
+
+        // 埋め込みを追加
+        function addEmbed() {
+            var embedUrl = prompt("埋め込みたいURLを入力:");
+            if (embedUrl) {
+                document.getElementById('editor').innerHTML += `<iframe src="${embedUrl}" width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
+            }
+        }
+
+        // HTMLコードを生成して表示
+        function generateHTML() {
+            var editorContent = document.getElementById('editor').innerHTML;
+            document.getElementById('output').value = editorContent;
+        }
+    </script>
+
+    <!-- 必要な外部ライブラリ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 </html>
