@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>おしゃれなWebサイト作成ツール</title>
+    <title>簡単なWebサイト作成ツール</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -60,47 +60,27 @@
             background-color: #f9f9f9;
             white-space: pre-wrap;
         }
-
-        /* スマホ対応 */
-        @media (max-width: 768px) {
-            .toolbar {
-                flex-direction: column;
-            }
-
-            .toolbar button, .toolbar select {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
     </style>
 </head>
 <body>
 
-    <h1>おしゃれなWebサイト作成ツール</h1>
+    <h1>簡単なWebサイト作成ツール</h1>
 
     <!-- ツールバー -->
     <div class="toolbar">
-        <select id="titleLevel">
-            <option value="h1">タイトル 1 (h1)</option>
-            <option value="h2">タイトル 2 (h2)</option>
-            <option value="h3">タイトル 3 (h3)</option>
-        </select>
         <button onclick="addTitle()">タイトルを追加</button>
         <button onclick="addParagraph()">段落を追加</button>
         <button onclick="toggleBold()">太字</button>
         <button onclick="toggleItalic()">斜体</button>
         <button onclick="addImage()">画像を追加</button>
         <button onclick="addGif()">GIFを追加</button>
-        <button onclick="addChart()">グラフを作成</button>
-        <button onclick="addPoll()">投票を作成</button>
-        <button onclick="addEmbed()">埋め込みを追加</button>
         <button onclick="generateHTML()">HTMLコード生成</button>
     </div>
 
     <!-- 編集領域 -->
     <div contenteditable="true" id="editor" placeholder="ここにコンテンツを入力...">
-        <h1>タイトルをここに追加</h1>
-        <p>段落テキストをここに追加</p>
+        <h1>ここにタイトルを追加</h1>
+        <p>ここに段落を追加</p>
     </div>
 
     <!-- 出力領域 -->
@@ -111,10 +91,9 @@
         // タイトルを追加
         function addTitle() {
             var editor = document.getElementById('editor');
-            var titleLevel = document.getElementById('titleLevel').value;
             var titleText = prompt("タイトルの内容を入力:");
             if (titleText) {
-                editor.innerHTML += `<${titleLevel}>${titleText}</${titleLevel}>`;
+                editor.innerHTML += `<h1>${titleText}</h1>`;
             }
         }
 
@@ -137,9 +116,9 @@
             document.execCommand('italic');
         }
 
-        // 画像を追加 (ファイルアップロード対応)
+        // 画像を追加
         function addImage() {
-            var imageUrl = prompt("画像のURLまたはファイルを選択:");
+            var imageUrl = prompt("画像のURLを入力:");
             if (imageUrl) {
                 var imgTag = `<img src="${imageUrl}" alt="画像" style="max-width:100%;">`;
                 document.getElementById('editor').innerHTML += imgTag;
@@ -154,82 +133,12 @@
             }
         }
 
-        // グラフを追加
-        function addChart() {
-            var chartCode = `
-                <canvas id="myChart" width="400" height="200"></canvas>
-                <script>
-                    var ctx = document.getElementById('myChart').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                            datasets: [{
-                                label: '# of Votes',
-                                data: [12, 19, 3, 5, 2, 3],
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)',
-                                    'rgba(255, 206, 86, 0.2)',
-                                    'rgba(75, 192, 192, 0.2)',
-                                    'rgba(153, 102, 255, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)'
-                                ],
-                                borderColor: [
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)',
-                                    'rgba(75, 192, 192, 1)',
-                                    'rgba(153, 102, 255, 1)',
-                                    'rgba(255, 159, 64, 1)'
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                </script>
-            `;
-            document.getElementById('editor').innerHTML += chartCode;
-        }
-
-        // 投票を追加
-        function addPoll() {
-            var pollHTML = `
-                <form>
-                    <label>好きな色を選んでください:</label><br>
-                    <input type="radio" name="color" value="Red">Red<br>
-                    <input type="radio" name="color" value="Blue">Blue<br>
-                    <input type="radio" name="color" value="Green">Green<br>
-                    <input type="radio" name="color" value="Yellow">Yellow<br>
-                </form>
-            `;
-            document.getElementById('editor').innerHTML += pollHTML;
-        }
-
-        // 埋め込みを追加
-        function addEmbed() {
-            var embedUrl = prompt("埋め込みたいURLを入力:");
-            if (embedUrl) {
-                document.getElementById('editor').innerHTML += `<iframe src="${embedUrl}" width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
-            }
-        }
-
         // HTMLコードを生成して表示
         function generateHTML() {
             var editorContent = document.getElementById('editor').innerHTML;
             document.getElementById('output').value = editorContent;
         }
     </script>
-
-    <!-- 必要な外部ライブラリ -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 </html>
